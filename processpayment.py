@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from werkzeug.exceptions import abort
 from decimal import Decimal
 from external_services.gateway_payment import externalServices
+
 import regex as re
 import datetime
 
@@ -25,11 +26,10 @@ def ProcessPayment():
             abort(400)
     except:
         abort(500)
-    print(params)
-    # return 'Payment is processed', 200
+
 
 def card_validator(number):
-    # pattern to match VISA/MasterCard only with 16 digits
+
     pattern = r'^((4\d{3})|(5[1-5]\d{2}))-?\d{4}-?\d{4}-?\d{4}$'
     if not re.search(pattern, number):
         return False
@@ -44,9 +44,7 @@ def verify_amount(amount):
         return False
 
 def validate_paramters(params):
-    # params['CreditCardNumber'] = params['CreditCardNumber']
-    # print(datetime.datetime.strptime(params['ExpirationDate'], "%d/%m/%Y"))
-    # print(Decimal(params['Amount']))
+
     if not type(params['CreditCardNumber']) == str or not len(params['CreditCardNumber'].replace("-","").strip()) == 16:
         return False
     if not card_validator(params['CreditCardNumber'].strip()):

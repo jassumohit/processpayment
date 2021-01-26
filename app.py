@@ -1,5 +1,4 @@
 from flask import Flask, jsonify
-from werkzeug.exceptions import HTTPException
 from processpayment import processpayment
 
 app = Flask(__name__)
@@ -12,22 +11,15 @@ def internal_error(error):
 
 @app.errorhandler(Exception)
 def not_found(error):
-    return jsonify(error="The request is invalid"), error.code
+    return jsonify(error="The request is invalid"), 400
 
-
-# @app.errorhandler(Exception)
-# def global_exception(e):
-#     if isinstance(e, HTTPException):
-#         return jsonify(error="The request is invalid"), e.code
-#     else:
-#         return jsonify(error="internal server error"), 500
 
 app.register_blueprint(processpayment, url_prefix='/payment')
 
 
-@app.route("/home")
+@app.route("/health")
 def home():
-    return "Hola it worked"
+    return jsonify(status="Success"), 200
 
 
 if __name__ == "__main__":
